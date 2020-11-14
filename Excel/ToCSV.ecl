@@ -26,9 +26,8 @@ EXPORT ToCSV := MODULE
 	END;
 
 	SHARED mBaseScriptsPath := '/tmp/hpcc/lpezet/excel';
-	SHARED mXLS2CSVScriptURL := 'https://raw.githubusercontent.com/lpezet/ecl-bundles/master/LPezet/Excel/xls2csv.py';
+	SHARED mXLS2CSVScriptURL := 'https://raw.githubusercontent.com/lpezet/ecl-bundle-lpezet/master/Excel/xls2csv.py';
 	SHARED mXLS2CSVScriptLocal := mBaseScriptsPath + '/xls2csv.py';
-	//SHARED mXLSX2CSVScriptURL := 'https://raw.githubusercontent.com/lpezet/ecl-bundles/master/Excel/xls2csv.py';
 	
 	EXPORT setup_scripts() := SEQUENTIAL(
 		OUTPUT( BinUtils.mkdir( mBaseScriptsPath, true ), NAMED('SetupMkdir') ),

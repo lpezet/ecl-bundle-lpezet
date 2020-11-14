@@ -8,6 +8,4 @@ EXPORT Bundle := MODULE(Std.BundleBase)
   EXPORT Copyright := 'Copyright (C) 2017 Luke Pezet';
   EXPORT DependsOn := [];
   EXPORT Version := '1.1.2';
-  EXPORT Properties := DICTIONARY( [{ 'Category' => 'Test' } ], Std.BundleBase.PropertyRecord);
-  EXPORT PlatformVersion := '5.2.6';
 END;

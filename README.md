@@ -2,7 +2,7 @@
 
 ## Installation
 
-	ecl-bundle install LPezet
+	ecl-bundle install https://github.com/lpezet/ecl-bundle-lpezet.git
 
 
 ## Usage

@@ -17,7 +17,7 @@
 		
 		#UNIQUENAME(new_layout)
 		%new_layout% := RECORD
-			UNSIGNED __dummy := 0; // This is so compiler doesn't throw an exception where this RECORD is of zero length.
+			UNSIGNED8 __dummy := 0; // This is so compiler doesn't throw an exception where this RECORD is of zero length.
 			#FOR(RecLay)
 				#FOR(Field)
 					#IF( NOT REGEXFIND('@' + %'{@name}'% + '@', %TrimmedFieldsToExclude%) )
@@ -50,8 +50,10 @@
 	// NewDS1 := AppendSuffixToFields(DS1, 'Orig', 'id');
 	// NewDS2 := AppendSuffixToFields(DS2, 'New', 'id');	
 	// DoCompareDatasets(NewDS1, NewDS2, 'Orig', 'New', 'id');
-	EXPORT DoCompareDatasets(pDS0, pDS1, pDS2, pSuffix1, pSuffix2, pJoinColumn) := MACRO
+	EXPORT DoCompareDatasets(pDS0, pDS1, pDS2, pSuffix1, pSuffix2, pJoinColumn) := FUNCTIONMACRO
 	#EXPORTXML(RecLay, RECORDOF(pDS0));
+	#UNIQUENAME(outputs)
+	#SET(outputs, '')
 	#FOR(RecLay)
 		#FOR(Field)
 			//OUTPUT(%'{@name}'%);
@@ -65,21 +67,24 @@
 				%Join_1% := JOIN(%TableORIG%, %TableNEW%, #EXPAND('LEFT.' + pJoinColumn + ' = RIGHT.' + pJoinColumn));
 				#UNIQUENAME(Diff);
 				%Diff% := %Join_1%(#EXPAND(%'{@name}'% + '_' + pSuffix1) != #EXPAND(%'{@name}'% + '_' + pSuffix2));
-				OUTPUT(%Diff%,,NAMED('DifferencesFor_' + %'{@name}'%));
+				#SET(outputs, %'outputs'% + '\nOUTPUT(' + %'Diff'% + ',,NAMED(\'DifferencesFor_' + %'{@name}'% + '\'));')
+				//OUTPUT(%Diff%,,NAMED('DifferencesFor_' + %'{@name}'%));
 			#END
-			
 		#END
+		RETURN SEQUENTIAL(
+			#EXPAND(%'outputs'%)
+		);
+		//OUTPUT(%'outputs'%);
 	#END
 	ENDMACRO;
 	
-	EXPORT CompareDatasets(pDS1, pDS2, pSuffix1, pSuffix2, pJoinColumn) := MACRO
+	EXPORT CompareDatasets(pDS1, pDS2, pSuffix1, pSuffix2, pJoinColumn) := FUNCTIONMACRO
 		IMPORT LPezet;
 		#UNIQUENAME(SuffixedDS1)
 		%SuffixedDS1% := LPezet.HPCC.DataComp.AppendSuffixToFields(pDS1, pSuffix1, pJoinColumn);
 		#UNIQUENAME(SuffixedDS2)
 		%SuffixedDS2% := LPezet.HPCC.DataComp.AppendSuffixToFields(pDS2, pSuffix2, pJoinColumn);
-		LPezet.HPCC.DataComp.DoCompareDatasets(pDS1, %SuffixedDS1%, %SuffixedDS2%, pSuffix1, pSuffix2, pJoinColumn);
-		//%SuffixedDS1%;
+		RETURN LPezet.HPCC.DataComp.DoCompareDatasets(pDS1, %SuffixedDS1%, %SuffixedDS2%, pSuffix1, pSuffix2, pJoinColumn);
 	ENDMACRO;
 	
 END;

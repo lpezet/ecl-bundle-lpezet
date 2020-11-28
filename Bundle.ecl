@@ -7,5 +7,5 @@ EXPORT Bundle := MODULE(Std.BundleBase)
   EXPORT License := 'http://www.apache.org/licenses/LICENSE-2.0';
   EXPORT Copyright := 'Copyright (C) 2017 Luke Pezet';
   EXPORT DependsOn := [];
-  EXPORT Version := '1.1.2';
+  EXPORT Version := '1.2.1';
 END;

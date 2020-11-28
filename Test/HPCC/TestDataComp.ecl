@@ -37,7 +37,6 @@ EXPORT TestDataComp := MODULE
 		
 	END;
 	
-	
 	EXPORT TestCompareDatasets := MODULE
 		SHARED layout := RECORD
 			STRING id;

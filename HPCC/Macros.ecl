@@ -41,6 +41,7 @@ EXPORT Macros := INTERFACE
 	* But it can be used to troubleshoot defaults by simply OUTPUTing the result.
 	*/
 	EXPORT default_record( pLayout ) := FUNCTIONMACRO
+		IMPORT LPezet;
 		#EXPORTXML(oXML, pLayout);
 		#UNIQUENAME( DefVal );
 		#UNIQUENAME( OutStr );
@@ -55,7 +56,7 @@ EXPORT Macros := INTERFACE
 				#IF( %{@position}% > 0 )
 					#APPEND( OutStr, ',')
 				#END
-				#SET( DefVal, Macros.default_value( %'{@type}'% ) );
+				#SET( DefVal, LPezet.HPCC.Macros.default_value( %'{@type}'% ) );
 				#APPEND( OutStr, %'DefVal'% )
 			#END	
 		#END
@@ -65,15 +66,16 @@ EXPORT Macros := INTERFACE
 	ENDMACRO;
 	
 	EXPORT default_record_new( pLayout ) := FUNCTIONMACRO
+		IMPORT LPezet;
 		#EXPORTXML(oXML, pLayout);
 
 		#DECLARE(OutStr)
 		#DECLARE(DefVal)
 		#SET(OutStr, '{' )
 		#FOR( oXML )
-			#APPEND( OutStr, Macros.default_value( %'{Field[1]/@type}'% ) );
+			#APPEND( OutStr, LPezet.HPCC.Macros.default_value( %'{Field[1]/@type}'% ) );
 			#FOR(Field[@position>0])
-				#SET( DefVal, Macros.default_value( %'@type}'% ) );
+				#SET( DefVal, LPezet.HPCC.Macros.default_value( %'@type}'% ) );
 				//#IF( %'DefVal'% <> '' )
 					#APPEND( OutStr, ',' + %'DefVal'% )
 				//#END
@@ -112,10 +114,11 @@ EXPORT Macros := INTERFACE
 	* oDS;
 	*/
 	EXPORT default_row( pLayout ) := FUNCTIONMACRO
+		IMPORT LPezet;
 		#UNIQUENAME( oRow );
 		//#DECLARE( oRow )
 		#SET( oRow, 'ROW(');
-		#APPEND( oRow, Macros.default_record( pLayout ) );
+		#APPEND( oRow, LPezet.HPCC.Macros.default_record( pLayout ) );
 		#APPEND( oRow, ', ');
 		#APPEND( oRow, #TEXT( pLayout ));
 		#APPEND( oRow, ')');
@@ -130,9 +133,10 @@ EXPORT Macros := INTERFACE
 	* oDS;
 	*/
 	EXPORT default_dataset( pLayout ) := FUNCTIONMACRO
+		IMPORT LPezet;
 		#DECLARE( oDS )
 		#SET( oDS, 'DATASET( [');
-		#APPEND( oDS, Macros.default_record( pLayout ) );
+		#APPEND( oDS, LPezet.HPCC.Macros.default_record( pLayout ) );
 		#APPEND( oDS, '], ');
 		#APPEND( oDS, #TEXT( pLayout ));
 		#APPEND( oDS, ')');
